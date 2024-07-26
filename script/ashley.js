@@ -26,7 +26,7 @@ module.exports.run = async function ({ api, event, args }) {
         const initialMessage = await api.sendMessage("𝙰𝚂𝙷𝙻𝙴𝚈 𝚃𝙰𝙻𝙺𝙸𝙽𝙶....", event.threadID);
 
         // Fetch the response from the Ashley API
-        const response = await axios.get(`https://markdevs-last-api-as2j.onrender.com/api/ashley?query=${encodeURIComponent(query)}`);
+        const response = await axios.get(`https://markdevs-last-api-2epw.onrender.com/api/ashley?query=${encodeURIComponent(query)}`);
         const ashleyResponse = response.data.result;
 
         // Check if the response contains valid data
