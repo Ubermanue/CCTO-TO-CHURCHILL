@@ -67,6 +67,7 @@ ${aiResponse}
     });
   } catch (error) {
     console.error('Error:', error);
-    await api.editMessage('Error: ' + error.message, responseMessage.messageID);
+    const errorMessage = `⚠️ Error: ${error.message}. Please try using Adobo command.`;
+    await api.editMessage(errorMessage, responseMessage.messageID);
   }
 };
