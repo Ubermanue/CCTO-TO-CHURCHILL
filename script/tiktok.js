@@ -24,7 +24,7 @@ module.exports.run = async function({ api, event, args }) {
 
 		api.sendMessage("🤳 | Searching, please wait...", event.threadID);
 
-		const response = await axios.get(`https://markdevs-last-api-as2j.onrender.com/api/tiksearch?search=${encodeURIComponent(searchQuery)}`);
+		const response = await axios.get(`https://markdevs-last-api-2epw.onrender.com/api/tiksearch?search=${encodeURIComponent(searchQuery)}`);
 
 		const videos = response.data.data.videos;
 
