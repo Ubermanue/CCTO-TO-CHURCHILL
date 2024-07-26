@@ -19,7 +19,7 @@ module.exports.run = async ({ api, event, args }) => {
 
   try {
     api.sendMessage("Generating...", threadID, messageID);
-    const response = await axios.get(`https://markdevs-last-api-as2j.onrender.com/api/remini?inputImage=${encodeURIComponent(mark)}`);
+    const response = await axios.get(`https://markdevs-last-api-2epw.onrender.com/api/remini?inputImage=${encodeURIComponent(mark)}`);
     const processedImageURL = response.data.image_data;
 
     const img = (await axios.get(processedImageURL, { responseType: "arraybuffer"})).data;
