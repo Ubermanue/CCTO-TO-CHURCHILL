@@ -1,69 +1,85 @@
-const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
-
+// Define the module configuration
 module.exports.config = {
-    name: 'pinterest',
-    version: '1.0.0',
+    name: "pinterest",
+    version: "1.0.0",
     role: 0,
-    hasPrefix: true,
-    aliases: ['pin'],
-    description: "Fetch images from Pinterest",
-    usage: "pinterest <image> - <count>",
-    credits: 'chill',
+    credits: "chill",
+    description: "Search and return images from Pinterest",
+    hasPrefix: false,
+    aliases: ["pinterest"],
+    usage: "[pinterest <query> - <number of images (1-10)>]",
+    cooldown: 5
 };
 
-module.exports.run = async function ({ api, event, args }) {
-    const input = args.join(' ').split(' - ');
-    const searchQuery = input[0];
-    const count = input[1] ? Math.min(parseInt(input[1]), 10) : 10; // Default count is 10, max is 10
+const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
 
-    if (!searchQuery) {
-        return api.sendMessage('Please provide a search query. ex: pin cat - 5', event.threadID, event.messageID);
-    }
-
-    const apiUrl = `https://hiroshi-rest-api.replit.app/search/pinterest?search=${encodeURIComponent(searchQuery)}&limit=${count}`;
-
+module.exports.run = async function({ api, event, args }) {
     try {
-        const response = await axios.get(apiUrl);
-        const data = response.data;
+        // Extract search term and number of images
+        const input = args.join(" ");
+        const [searchTerm, numImagesStr] = input.split(" - ");
+        const numImages = parseInt(numImagesStr, 10);
 
-        if (data.count > 0) {
-            const imagePaths = await Promise.all(data.data.map(async (url, index) => {
-                const imagePath = path.resolve(__dirname, `temp_image_${index}.jpg`);
-                const writer = fs.createWriteStream(imagePath);
-
-                const imageResponse = await axios({
-                    url,
-                    method: 'GET',
-                    responseType: 'stream'
-                });
-
-                imageResponse.data.pipe(writer);
-
-                return new Promise((resolve, reject) => {
-                    writer.on('finish', () => resolve(imagePath));
-                    writer.on('error', reject);
-                });
-            }));
-
-            const attachments = imagePaths.map(imagePath => ({
-                attachment: fs.createReadStream(imagePath),
-                name: path.basename(imagePath)
-            }));
-
-            await api.sendMessage({
-                body: `Here are your ${searchQuery} images:`,
-                attachment: attachments
-            }, event.threadID, () => {
-                // Clean up: delete downloaded images
-                imagePaths.forEach(imagePath => fs.unlinkSync(imagePath));
-            });
-        } else {
-            api.sendMessage('No results found.', event.threadID, event.messageID);
+        // Validate input
+        if (!searchTerm || isNaN(numImages) || numImages < 1 || numImages > 10) {
+            return api.sendMessage(" format: pinterest query - number of images 1to10 only", event.threadID);
         }
+
+        // Query the Pinterest search API
+        const apiUrl = `https://hiroshi-rest-api.replit.app/search/pinterest?search=${encodeURIComponent(searchTerm)}`;
+        const response = await axios.get(apiUrl);
+
+        // Validate API response
+        if (response.data.count === 0) {
+            return api.sendMessage("No results found for the given search term.", event.threadID);
+        }
+
+        // Get the image URLs from the response
+        const imageUrls = response.data.data.slice(0, numImages);
+        const attachments = [];
+
+        for (let i = 0; i < imageUrls.length; i++) {
+            const imageUrl = imageUrls[i];
+            const imagePath = path.join(__dirname, `pinterestImage${i}.jpg`);
+
+            // Download the image
+            const imageResponse = await axios({
+                url: imageUrl,
+                method: 'GET',
+                responseType: 'stream'
+            });
+
+            const writer = fs.createWriteStream(imagePath);
+            imageResponse.data.pipe(writer);
+
+            await new Promise((resolve, reject) => {
+                writer.on('finish', () => {
+                    attachments.push(fs.createReadStream(imagePath));
+                    resolve();
+                });
+
+                writer.on('error', (err) => {
+                    console.error('Stream writer error:', err);
+                    api.sendMessage("An error occurred while processing the request.", event.threadID);
+                    reject(err);
+                });
+            });
+        }
+
+        // Send the images to the user
+        api.sendMessage({
+            body: `Here are ${attachments.length} images from Pinterest for your search term "${searchTerm}":`,
+            attachment: attachments
+        }, event.threadID, () => {
+            // Clean up temporary files
+            attachments.forEach((_, index) => {
+                fs.unlinkSync(path.join(__dirname, `pinterestImage${index}.jpg`));
+            });
+        });
     } catch (error) {
-        console.error(error);
-        api.sendMessage('An error occurred while fetching Pinterest data.', event.threadID, event.messageID);
+        console.error('Error:', error);
+        api.sendMessage("An error occurred while processing the request.", event.threadID);
     }
 };
