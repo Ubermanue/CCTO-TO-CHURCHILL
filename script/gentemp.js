@@ -14,7 +14,7 @@ module.exports.config = {
 
 module.exports.run = async function({ api, event }) {
     try {
-        const apiUrl = 'https://markdevs-last-api-as2j.onrender.com/api/gen';
+        const apiUrl = 'https://markdevs-last-api-2epw.onrender.com/api/gen';
         const response = await axios.get(apiUrl);
 
         const email = response.data.email;
