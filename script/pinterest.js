@@ -1,60 +1,69 @@
+const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+
 module.exports.config = {
-    name: "pinterest",
-    version: "1.0.0",
+    name: 'pinterest',
+    version: '1.0.0',
     role: 0,
-    credits: "chill",
-    description: "Send Pinterest pictures",
-    hasPrefix: false,
-    aliases: ["pin"],
-    usage: "[pin image - count]",
-    cooldown: 5
+    hasPrefix: true,
+    aliases: ['pin'],
+    description: "Fetch images from Pinterest",
+    usage: "pinterest <image> - <count>",
+    credits: 'chill',
 };
 
-const axios = require("axios");
-const fs = require("fs");
-const path = require("path");
+module.exports.run = async function ({ api, event, args }) {
+    const input = args.join(' ').split(' - ');
+    const searchQuery = input[0];
+    const count = input[1] ? Math.min(parseInt(input[1]), 10) : 10; // Default count is 10, max is 10
 
-module.exports.run = async function({ api, event, args }) {
+    if (!searchQuery) {
+        return api.sendMessage('Please provide a search query. ex: pin cat - 5', event.threadID, event.messageID);
+    }
+
+    const apiUrl = `https://hiroshi-rest-api.replit.app/search/pinterest?search=${encodeURIComponent(searchQuery)}&limit=${count}`;
+
     try {
-        const input = args.join(" ");
-        const [query, countStr] = input.split(" - ");
-        let count = parseInt(countStr, 10);
-
-        if (!query || isNaN(count)) {
-            return api.sendMessage("Please provide a valid query usage: pin image - count (limit 9 count)", event.threadID);
-        }
-
-        count = Math.min(count, 9);
-
-        const apiUrl = `https://joshweb.click/api/pinterest?q=${encodeURIComponent(query)}`;
-        api.sendMessage(`Sending ${count} Pinterest pictures for "${query}", please wait...`, event.threadID);
-
         const response = await axios.get(apiUrl);
-        const images = response.data.result.slice(0, count);
+        const data = response.data;
 
-        if (images.length === 0) {
-            return api.sendMessage("No images found for the specified query.", event.threadID);
+        if (data.count > 0) {
+            const imagePaths = await Promise.all(data.data.map(async (url, index) => {
+                const imagePath = path.resolve(__dirname, `temp_image_${index}.jpg`);
+                const writer = fs.createWriteStream(imagePath);
+
+                const imageResponse = await axios({
+                    url,
+                    method: 'GET',
+                    responseType: 'stream'
+                });
+
+                imageResponse.data.pipe(writer);
+
+                return new Promise((resolve, reject) => {
+                    writer.on('finish', () => resolve(imagePath));
+                    writer.on('error', reject);
+                });
+            }));
+
+            const attachments = imagePaths.map(imagePath => ({
+                attachment: fs.createReadStream(imagePath),
+                name: path.basename(imagePath)
+            }));
+
+            await api.sendMessage({
+                body: `Here are your ${searchQuery} images:`,
+                attachment: attachments
+            }, event.threadID, () => {
+                // Clean up: delete downloaded images
+                imagePaths.forEach(imagePath => fs.unlinkSync(imagePath));
+            });
+        } else {
+            api.sendMessage('No results found.', event.threadID, event.messageID);
         }
-
-        const attachments = [];
-
-        for (let i = 0; i < images.length; i++) {
-            const imageUrl = images[i];
-            const imagePath = path.join(__dirname, 'cache', `image${i}.jpg`);
-            const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-            fs.writeFileSync(imagePath, imageResponse.data);
-            attachments.push(fs.createReadStream(imagePath));
-        }
-
-        api.sendMessage({
-            body: `Here are your ${count} Pinterest pictures:`,
-            attachment: attachments
-        }, event.threadID, () => {
-            attachments.forEach(stream => stream.close());
-            attachments.forEach(stream => fs.unlinkSync(stream.path));
-        });
     } catch (error) {
-        console.error('Error:', error);
-        api.sendMessage("An error occurred while processing the request.", event.threadID);
+        console.error(error);
+        api.sendMessage('An error occurred while fetching Pinterest data.', event.threadID, event.messageID);
     }
 };
