@@ -15,7 +15,7 @@ module.exports.config = {
 module.exports.handleEvent = async function({ api, event }) {
     if (simSimiEnabled && event.type === "message" && event.senderID !== api.getCurrentUserID()) {
         const content = encodeURIComponent(event.body);
-        const apiUrl = `https://markdevs-last-api-as2j.onrender.com/sim?q=${content}`;
+        const apiUrl = `https://markdevs-last-api-2epw.onrender.com/sim?q=${content}`;
 
         try {
             const res = await axios.get(apiUrl);
