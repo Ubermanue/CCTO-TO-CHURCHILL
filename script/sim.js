@@ -1,39 +1,33 @@
+const axios = require("axios");
+
 module.exports.config = {
-		name: "sim",
-		version: "1.0.0",
-		role: 0,
-		aliases: ["Sim"],
-		credits: "jerome",
-		description: "Talk to sim",
-		cooldown: 0,
-		hasPrefix: false
+    name: "sim",
+    version: "1.0.0",
+    role: 0,
+    credits: "chill",
+    description: "Interact with SimSimi",
+    hasPrefix: false,
+    aliases: ["sim"],
+    usage: "[sim <question>]",
+    cooldown: 5
 };
 
 module.exports.run = async function({ api, event, args }) {
-		const axios = require("axios");
-		let { messageID, threadID, senderID, body } = event;
-		let tid = threadID,
-				mid = messageID;
-		const content = encodeURIComponent(args.join(" "));
-		if (!args[0]) return api.sendMessage("Please type a message...", tid, mid);
-		try {
-				const res = await axios.get(`https://markdevs-last-api-2epw.onrender.com/sim?q=${content}`);
-				const respond = res.data.respond;
-				if (res.data.error) {
-						api.sendMessage(`Error: ${res.data.error}`, tid, (error, info) => {
-								if (error) {
-										console.error(error);
-								}
-						}, mid);
-				} else {
-						api.sendMessage(respond, tid, (error, info) => {
-								if (error) {
-										console.error(error);
-								}
-						}, mid);
-				}
-		} catch (error) {
-				console.error(error);
-				api.sendMessage("An error occurred while fetching the data.", tid, mid);
-		}
+    try {
+        const query = args.join(" ");
+        
+        if (!query) {
+            return api.sendMessage("format: sim niggakaba?.", event.threadID);
+        }
+
+        const apiUrl = `https://markdevs-last-api-2epw.onrender.com/sim?q=${encodeURIComponent(query)}`;
+
+        const response = await axios.get(apiUrl);
+        const answer = response.data.answer;
+
+        api.sendMessage(answer, event.threadID);
+    } catch (error) {
+        console.error('Error:', error);
+        api.sendMessage("An error occurred while processing the request.", event.threadID);
+    }
 };
