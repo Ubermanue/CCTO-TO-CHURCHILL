@@ -6,73 +6,69 @@ module.exports.config = {
   role: 0,
   hasPrefix: false,
   aliases: ['ai'],
-  description: "AI",
-  usage: "ai [prompt]",
+  description: "Ask AI a question",
+  usage: "ai [question]",
   credits: 'churchill',
   cooldown: 3,
 };
 
 module.exports.run = async function({ api, event, args }) {
   const prompt = args.join(" ");
-  const userID = "100";
+  const threadID = event.threadID;
+  const senderID = event.senderID;
+  const messageID = event.messageID;
 
   if (!prompt) {
-    api.sendMessage('Please provide a question ex: ai what is n1gga?', event.threadID, event.messageID);
+    api.sendMessage('Please provide a question, ex: ai what is love?', threadID, messageID);
     return;
   }
 
-  const chill = await new Promise(resolve => {
-    api.sendMessage('🤖 𝘎𝘗𝘛4 𝘈𝘕𝘚𝘞𝘌𝘙𝘐𝘕𝘎...', event.threadID, (err, info) => {
+  const responseMessage = await new Promise(resolve => {
+    api.sendMessage('🤖 𝚃𝚄𝚁𝙱𝙾 𝙰𝙽𝚂𝚆𝙴𝚁𝙸𝙽𝙶...', threadID, (err, info) => {
       if (err) {
         console.error('Error sending message:', err);
         return;
       }
-      api.setMessageReaction("⏳", info.messageID, (err) => {
-        if (err) console.error('Error setting reaction:', err);
-      });
       resolve(info);
     });
   });
 
-  const apiUrl = `https://markdevs-last-api-as2j.onrender.com/gpt4?prompt=${encodeURIComponent(prompt)}&uid=${encodeURIComponent(userID)}`;
+  const apiUrl = `https://joshweb.click/new/gpt-3_5-turbo?prompt=${encodeURIComponent(prompt)}`;
 
   try {
     const startTime = Date.now();
-    const hot = await axios.get(apiUrl);
-    const result = hot.data;
-    const aiResponse = result.gpt4;
+    const response = await axios.get(apiUrl);
+    const result = response.data;
+    const aiResponse = result.result.reply;
     const endTime = Date.now();
     const responseTime = ((endTime - startTime) / 1000).toFixed(2);
 
-    api.getUserInfo(event.senderID, async (err, ret) => {
+    api.getUserInfo(senderID, async (err, ret) => {
       if (err) {
         console.error('Error fetching user info:', err);
-        await api.editMessage('Error fetching user info.', chill.messageID);
+        await api.editMessage('Error fetching user info.', responseMessage.messageID);
         return;
       }
 
-      const userName = ret[event.senderID].name;
-      const formattedResponse = `🤖 𝙶𝙿𝚃4+ 𝙲𝙾𝙽𝚃𝙸𝙽𝚄𝙴𝚂 𝙰𝙸
+      const userName = ret[senderID].name;
+      const formattedResponse = `🤖 𝙶𝙿𝚃+ 𝚃𝚄𝚁𝙱𝙾 𝙰𝙸
 ━━━━━━━━━━━━━━━━━━
+\`\`\`
 ${aiResponse}
+\`\`\`
 ━━━━━━━━━━━━━━━━━━
-🗣 Asked by: ${userName}
-⏰ Respond Time: ${responseTime}s
-━━━━━━━━━━━━━━━━━━
-𝙸𝚏 𝚎𝚛𝚛𝚘𝚛 𝚃𝚛𝚢 𝚄𝚜𝚎 "𝙶𝙿𝚃4" 𝙲𝙼𝙳`;
+🗣 𝙰𝚜𝚔𝚎𝚍 𝚋𝚢: ${userName}
+⏰ 𝚁𝚎𝚜𝚙𝚘𝚗𝚜𝚎 𝚃𝚒𝚖𝚎: ${responseTime}s`;
 
       try {
-        await api.editMessage(formattedResponse, chill.messageID);
-        api.setMessageReaction("✅", chill.messageID, (err) => {
-          if (err) console.error('Error setting reaction:', err);
-        });
+        await api.editMessage(formattedResponse, responseMessage.messageID);
       } catch (error) {
         console.error('Error editing message:', error);
-        api.sendMessage('Error editing message: ' + error.message, event.threadID, event.messageID);
+        api.sendMessage('Error editing message: ' + error.message, threadID, messageID);
       }
     });
   } catch (error) {
     console.error('Error:', error);
-    await api.editMessage('Error: ' + error.message, chill.messageID);
+    await api.editMessage('Error: ' + error.message, responseMessage.messageID);
   }
 };
