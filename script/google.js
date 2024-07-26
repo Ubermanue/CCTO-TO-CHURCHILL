@@ -37,7 +37,7 @@ module.exports.run = async function({ api, event, args }) {
       }
 
       const userName = ret[event.senderID].name;
-      const formattedResponse = '𝙶𝚘𝚘𝚐𝚕𝚎 𝙿𝚊𝚕𝚖 𝚁𝚎𝚜𝚙𝚘𝚗𝚜𝚎\n━━━━━━━━━━━━━━━━━━\n${result}\n━━━━━━━━━━━━━━━━━━\n\n🗣 Asked by: ${userName}\n⏰ Respond Time: ${responseTime}s\n━━━━━━━━━━━━━━━━━━\n;
+      const formattedResponse = '𝙶𝚘𝚘𝚐𝚕𝚎 𝙿𝚊𝚕𝚖 𝚁𝚎𝚜𝚙𝚘𝚗𝚜𝚎\n━━━━━━━━━━━━━━━━━━\n${result}\n━━━━━━━━━━━━━━━━━━\n\n🗣 Asked by: ${userName}\n⏰ Respond Time: ${responseTime}s\n━━━━━━━━━━━━━━━━━━\n';
 
       api.sendMessage(formattedResponse, event.threadID, event.messageID);
     });
