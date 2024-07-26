@@ -53,9 +53,7 @@ module.exports.run = async function({ api, event, args }) {
       const userName = ret[senderID].name;
       const formattedResponse = `🤖 𝙶𝙿𝚃+ 𝚃𝚄𝚁𝙱𝙾 𝙰𝙸
 ━━━━━━━━━━━━━━━━━━
-\`\`\`
 ${aiResponse}
-\`\`\`
 ━━━━━━━━━━━━━━━━━━
 🗣 𝙰𝚜𝚔𝚎𝚍 𝚋𝚢: ${userName}
 ⏰ 𝚁𝚎𝚜𝚙𝚘𝚗𝚜𝚎 𝚃𝚒𝚖𝚎: ${responseTime}s`;
