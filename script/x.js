@@ -1,97 +1,69 @@
-const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
-
 module.exports.config = {
-  name: 'x',
-  version: '1.0.0',
-  role: 0,
-  credits: 'deku convert by chilli',
-  description: 'X',
-  hasPrefix: true,
-  aliases: ['x'],
-  usage: 'x [search]',
-  cooldown: 5,
+	name: "x",
+	version: "1.0.0",
+	role: 0,
+	credits: "Churchill", 
+	description: "X video search",
+	hasPrefix: false,
+	aliases: ["x"],
+	usage: "[x <query>]",
+	cooldown: 5, 
 };
 
-let r;
+const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
 
 module.exports.run = async function({ api, event, args }) {
-  try {
-    function remove(url) {
-      return url.replace(/\./g, '(.)');
-    }
-    const q = args.join(' ');
-    if (!q) return api.sendMessage('Please enter a search query.', event.threadID, event.messageID);
+	try {
+		const searchQuery = args.join(" ");
+		if (!searchQuery) {
+			api.sendMessage("Usage: xsearch <search text>", event.threadID);
+			return;
+		}
 
-    api.sendMessage('Searching...', event.threadID, async function (err, info) {
-      if (err) return;
+		api.sendMessage("😏 | Searching, please wait...", event.threadID);
 
-      const res = (await axios.get(`https://joshweb.click/api/xsearch?q=${encodeURIComponent(q)}`)).data;
-      const data = res.result.result;
-      r = data;
-      let msg = '[ XNXX SEARCH ]\n\n',
-          count = 0;
+		const response = await axios.get(`https://joshweb.click/api/xsearch?q=${encodeURIComponent(searchQuery)}`);
+		const videos = response.data.result.result;
 
-      for (let i = 0; i < data.length; i++) {
-        let links = remove(data[i].link);
-        msg += `${(count += 1)}. 📝Title: ${data[i].title}\n\n🔗Link: ${links}\n\n📜Info: ${data[i].info}\n\n`;
-      }
+		if (!videos || videos.length === 0) {
+			api.sendMessage("No videos found for the given search query.", event.threadID);
+			return;
+		}
 
-      msg += '\nReply to this message with number you selected.\nNOTE: To avoid error, please choose only 6-10 minutes videos.\n\n[ XNXX SEARCH ]';
-      api.sendMessage(msg, event.threadID, event.messageID);
+		const videoData = videos[0];
+		const videoUrl = videoData.link;
+		const title = videoData.title;
+		const info = videoData.info;
 
-      global.handle.replies[info.messageID] = {
-        cmdname: module.exports.config.name,
-        tid: event.threadID,
-        mid: event.messageID,
-        uid: event.senderID,
-        this_mid: info.messageID,
-        this_tid: event.threadID,
-        step: 'search',
-      };
-    });
-  } catch (e) {
-    api.sendMessage('Error occurred: ' + e.message, event.threadID, event.messageID);
-  }
-};
+		api.sendMessage(`📹 | Found video: ${title}\n${info}\n\nDownloading, please wait...`, event.threadID);
 
-module.exports.runReply = async function({ api, event, reply }) {
-  if (!r) return api.sendMessage('No results found.', reply.tid, reply.mid);
+		const dlResponse = await axios({
+			method: 'get',
+			url: `https://joshweb.click/api/xdl?q=${encodeURIComponent(videoUrl)}`,
+			responseType: 'stream'
+		});
 
-  if (reply.step === 'search') {
-    const num = parseInt(event.body);
-    if (isNaN(num)) return api.sendMessage('Please provide a valid number', reply.tid, reply.mid);
-    if (num < 1 || num > r.length) return api.sendMessage('Invalid number', reply.tid, reply.mid);
+		const filePath = path.join(__dirname, `/cache/x_video.mp4`);
+		const writer = fs.createWriteStream(filePath);
+		dlResponse.data.pipe(writer);
 
-    const result = r[num - 1];
-    api.sendMessage('Downloading...', reply.tid, reply.mid);
+		writer.on('finish', () => {
+			api.sendMessage(
+				{ body: `📹 | Here is your video:\n${title}\n${info}`, attachment: fs.createReadStream(filePath) },
+				event.threadID,
+				() => fs.unlinkSync(filePath)
+			);
+		});
 
-    const link = result.link;
-    const dl = await axios.get(`https://joshweb.click/api/xdl?q=${encodeURIComponent(link)}`);
-    const links = dl.data.result.files.high;
-    const videoPath = path.join(__dirname, 'cache', 'x.mp4');
-    const writer = fs.createWriteStream(videoPath);
+		writer.on('error', (err) => {
+			console.error('Error:', err);
+			api.sendMessage("An error occurred while downloading the video.", event.threadID);
+		});
 
-    const videoResponse = await axios({
-      method: 'get',
-      url: encodeURI(links),
-      responseType: 'stream'
-    });
-
-    videoResponse.data.pipe(writer);
-
-    writer.on('finish', () => {
-      api.sendMessage(
-        { attachment: fs.createReadStream(videoPath) },
-        reply.tid,
-        reply.mid,
-        () => fs.unlinkSync(videoPath)
-      );
-    });
-
-    writer.on('error', () => {
-      api.sendMessage('Error downloading the video.', reply.tid, reply.mid);
-    });
-  }
+	} catch (error) {
+		console.error('Error:', error);
+		api.sendMessage("An error occurred while processing the request.", event.threadID);
+	}
 };
