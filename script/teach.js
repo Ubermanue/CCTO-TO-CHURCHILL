@@ -3,33 +3,32 @@ const axios = require("axios");
 module.exports.config = {
     name: "teach",
     version: "1.0.0",
-    hasPermission: 0,
-    credits: "jerome",
-    description: "Teach Simsimi",
-    usages: "Teach",
-    commandCategory: "...",
-    cooldowns: 0
+    role: 0,
+    credits: "chill",
+    description: "Teach SimSimi a new response",
+    hasPrefix: false,
+    aliases: ["teach"],
+    usage: "[teach question | response]",
+    cooldown: 5
 };
 
-module.exports.run = async ({ api, event, args }) => {
+module.exports.run = async function({ api, event, args }) {
     try {
-        const text = args.join(" ");
-        const text1 = text.substr(0, text.indexOf(' - '));
-        const text2 = text.split(" - ").pop();
+        const input = args.join(" ");
+        const [question, response] = input.split(" | ");
 
-        if (!text1 || !text2) {
-            return api.sendMessage(`Usage: ${global.config.PREFIX}teach hi - hello`, event.threadID, event.messageID);
+        if (!question || !response) {
+            return api.sendMessage("Please provide both a question and a response in the format: teach question | response", event.threadID);
         }
 
-        const response = await axios.get(`https://simsimi-api-pro.onrender.com/teach?ask=${encodeURIComponent(text1)}&ans=${encodeURIComponent(text2)}`);
+        const apiUrl = `https://markdevs-last-api-2epw.onrender.com/teach?q=${encodeURIComponent(question)}&r=${encodeURIComponent(response)}`;
 
-        if (response.data.respond.includes("already exists")) {
-            return api.sendMessage(`Sim API has already learned this phrase.`, event.threadID, event.messageID);
-        }
+        const apiResponse = await axios.get(apiUrl);
+        const message = apiResponse.data.message;
 
-        api.sendMessage(`Your ask: ${text1}\nSim respond: ${text2}`, event.threadID, event.messageID);
+        api.sendMessage(message, event.threadID);
     } catch (error) {
-        console.error("An error occurred:", error);
-        api.sendMessage("Oops! Something went wrong.", event.threadID, event.messageID);
+        console.error('Error:', error);
+        api.sendMessage("An error occurred while processing the request.", event.threadID);
     }
 };
