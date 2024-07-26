@@ -19,7 +19,7 @@ module.exports.run = async function({ api, event, args }) {
             return api.sendMessage("Please provide an email address to check.", event.threadID);
         }
 
-        const apiUrl = `https://markdevs-last-api-as2j.onrender.com/api/getmessage/${email}`;
+        const apiUrl = `https://markdevs-last-api-2epw.onrender.com/api/getmessage/${email}`;
         const response = await axios.get(apiUrl);
 
         if (response.data.error) {
