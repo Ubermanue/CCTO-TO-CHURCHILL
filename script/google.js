@@ -1,48 +1,55 @@
-const axios = require('axios');
-
 module.exports.config = {
-  name: 'google',
-  version: '1.0.0',
-  role: 0,
-  hasPrefix: false,
-  aliases: ['g'],
-  description: "Google Command",
-  usage: "google [query]",
-  credits: 'churchill',
-  cooldown: 3,
+	name: "google",
+	version: "1.0.0",
+	role: 0,
+	credits: "Your Name", 
+	description: "Google search using custom API",
+	hasPrefix: true,
+	aliases: ["g"],
+	usage: "[google <query>]",
+	cooldown: 10, 
 };
 
+const axios = require("axios");
+
 module.exports.run = async function({ api, event, args }) {
-  const query = args.join(" ");
+	const searchQuery = args.join(" ");
+	const senderID = event.senderID;  
+	const userProfile = await api.getUserInfo(senderID);
+	const userName = userProfile[senderID].name;
 
-  if (!query) {
-    api.sendMessage('Please provide a query. Example: google What is the weather today?', event.threadID, event.messageID);
-    return;
-  }
+	if (!searchQuery) {
+		api.sendMessage("Usage: google urquestion", event.threadID);
+		return;
+	}
 
-  const requestUrl = `https://joshweb.click/api/palm2?q=${encodeURIComponent(query)}`;
+	api.sendMessage(`🔍 | ${userName} is asking: ${searchQuery}\n\n⏳ Generating answer... 0%`, event.threadID, (err, info) => {
+		if (err) return;
 
-  try {
-    const startTime = Date.now();
-    const response = await axios.get(requestUrl);
-    const result = response.data.result;
-    const endTime = Date.now();
-    const responseTime = ((endTime - startTime) / 1000).toFixed(2);
+		const messageID = info.messageID;
 
-    api.getUserInfo(event.senderID, async (err, ret) => {
-      if (err) {
-        console.error('Error fetching user info:', err);
-        api.sendMessage('Error fetching user info.', event.threadID, event.messageID);
-        return;
-      }
+		// Simulating a progress bar
+		let progress = 0;
+		const progressBar = setInterval(() => {
+			progress += 20;
+			api.editMessage(`🔍 | ${userName} is asking: ${searchQuery}\n\n⏳ Generating answer... ${progress}%`, event.threadID, messageID);
+			if (progress >= 100) clearInterval(progressBar);
+		}, 1000);
 
-      const userName = ret[event.senderID].name;
-      const formattedResponse = '𝙶𝚘𝚘𝚐𝚕𝚎 𝙿𝚊𝚕𝚖 𝚁𝚎𝚜𝚙𝚘𝚗𝚜𝚎\n━━━━━━━━━━━━━━━━━━\n${result}\n━━━━━━━━━━━━━━━━━━\n\n🗣 Asked by: ${userName}\n⏰ Respond Time: ${responseTime}s\n━━━━━━━━━━━━━━━━━━\n';
+		axios.get(`https://joshweb.click/api/palm2?q=${encodeURIComponent(searchQuery)}`)
+			.then(response => {
+				clearInterval(progressBar); // Stop progress bar
+				const apiResponse = response.data.result;
 
-      api.sendMessage(formattedResponse, event.threadID, event.messageID);
-    });
-  } catch (error) {
-    console.error('Error:', error);
-    api.sendMessage('Error: ' + error.message, event.threadID, event.messageID);
-  }
+				// Final formatted message
+				const newMessage = `🕳  𝙶𝙾𝙾𝙶𝙻𝙴  𝙰𝙸\n━━━━━━━━━━━━━━━━━━\n${apiResponse}\n━━━━━━━━━━━━━━━━━━\n🗣 𝙰𝚜𝚔𝚎𝚍 𝚋𝚢: ${userName}`;
+
+				api.editMessage(newMessage, event.threadID, messageID);
+			})
+			.catch(error => {
+				clearInterval(progressBar); // Stop progress bar
+				console.error('Error:', error);
+				api.editMessage("An error occurred while processing the request.", event.threadID, messageID);
+			});
+	});
 };
