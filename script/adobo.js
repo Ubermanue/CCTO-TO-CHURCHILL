@@ -26,7 +26,7 @@ module.exports.run = async function({ api, event, args }) {
     });
   });
 
-  const apiUrl = `https://markdevs-last-api-as2j.onrender.com/api/adobo/gpt?query=${encodeURIComponent(query)}`;
+  const apiUrl = `https://markdevs-last-api-2epw.onrender.com/api/adobo/gpt?query=${encodeURIComponent(query)}`;
   const startTime = Date.now();
 
   try {
