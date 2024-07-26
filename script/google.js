@@ -2,12 +2,12 @@ module.exports.config = {
 	name: "google",
 	version: "1.0.0",
 	role: 0,
-	credits: "Your Name", 
-	description: "Google search using custom API",
+	credits: "Churchill", 
+	description: "Google pal",
 	hasPrefix: true,
 	aliases: ["g"],
 	usage: "[google <query>]",
-	cooldown: 10, 
+	cooldown: 2, 
 };
 
 const axios = require("axios");
