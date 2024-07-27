@@ -38,7 +38,7 @@ module.exports.run = async function({ api, event, args }) {
 ━━━━━━━━━━━━━━━━━━
 ${responseString}
 ━━━━━━━━━━━━━━━━━━
-◉ -,-
+𝚃𝚈𝙿𝙴 "𝙲𝙻𝙴𝙰𝚁 𝙲𝙾𝙽𝚅𝙾" 𝚃𝙾 𝙲𝙻𝙴𝙰𝚁 𝙲𝙾𝙽𝚅𝙾𝚁𝚂𝙰𝚃𝙸𝙾𝙽
         `;
 
         await api.editMessage(formattedResponse.trim(), initialMessage.messageID);
