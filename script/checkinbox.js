@@ -28,7 +28,7 @@ module.exports.run = async function({ api, event, args }) {
 
         const messages = response.data.messages || [];
         if (messages.length === 0) {
-            return api.sendMessage("No messages found for the provided email address.", event.threadID);
+            return api.sendMessage("No messages found for the provided email address. ex: checkinbox l3xvo65q@txcct.com", event.threadID);
         }
 
         let messageContent = `Messages for ${email}:\n\n`;
