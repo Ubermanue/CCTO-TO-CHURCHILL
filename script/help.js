@@ -38,11 +38,11 @@ module.exports.run = async function ({ api, event, enableCommands, args, Utils, 
 
       helpMessage += `━━━━━━━━━━━━━━━\n`;
       helpMessage += `━━𝙲𝙾𝙼𝙼𝙰𝙽𝙳 𝙿𝙰𝙶𝙴 : <${page}/${pages}>━━\n`;
-      helpMessage += `━━CHILLI 𝖠𝖨 𝖢𝖧𝖠𝖳𝖡𝖮𝖳━━\n`;
+      helpMessage += `━━Vixvus 𝖠𝖨 𝖢𝖧𝖠𝖳𝖡𝖮𝖳━━\n`;
       helpMessage += `Total commands: ${totalCommands}\n`;
       helpMessage += `Type "help all" to see all commands.\n`;
       helpMessage += `━━━━━━━━━━━━━━━━━━\n\n`;
-      helpMessage += `𝙰𝚄𝚃𝙾𝙻𝚄𝙱𝙾𝚃 𝙾𝚆𝙽𝙴𝚁: https://www.facebook.com/Churchill.Dev4100`;
+      helpMessage += `𝙰𝚄𝚃𝙾𝙱𝙾𝚃 𝙾𝚆𝙽𝙴𝚁: https://www.facebook.com/vixvus`;
 
       api.sendMessage(helpMessage, event.threadID, event.messageID);
     } else if (input.toLowerCase() === 'all') {
@@ -52,10 +52,10 @@ module.exports.run = async function ({ api, event, enableCommands, args, Utils, 
       }
 
       helpMessage += `━━━━━━━━━━━━━━━\n`;
-      helpMessage += `━━CHILLI 𝖠𝖨 𝖢𝖧𝖠𝖳𝖡𝖮𝖳━━\n`;
+      helpMessage += `━━VIXVUS 𝖠𝖨 𝖢𝖧𝖠𝖳𝖡𝖮𝖳━━\n`;
       helpMessage += `Total commands: ${totalCommands}\n`;
       helpMessage += `━━━━━━━━━━━━━━━━━━\n\n`;
-      helpMessage += `𝙰𝚄𝚃𝙾𝙻𝚄𝙱𝙾𝚃 𝙾𝚆𝙽𝙴𝚁: https://www.facebook.com/Churchill.Dev4100`;
+      helpMessage += `𝙰𝚄𝚃𝙾𝙱𝙾𝚃 𝙾𝚆𝙽𝙴𝚁: https://www.facebook.com/vixvus`;
 
       api.sendMessage(helpMessage, event.threadID, event.messageID);
     } else {
