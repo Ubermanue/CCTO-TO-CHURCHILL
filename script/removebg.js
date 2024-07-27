@@ -16,9 +16,16 @@ module.exports.config = {
 
 module.exports.run = async function ({ api, event }) {
     try {
-        const attachment = event.attachments[0];
+        // Check if the message is a reply
+        if (!event.messageReply || !event.messageReply.attachments || event.messageReply.attachments.length === 0) {
+            api.sendMessage("Please reply to an image to remove its background.", event.threadID);
+            return;
+        }
+
+        // Get the attachment from the replied message
+        const attachment = event.messageReply.attachments[0];
         if (!attachment || attachment.type !== 'photo') {
-            api.sendMessage("Please reply this to the image -removedbg-.", event.threadID);
+            api.sendMessage("Please reply to an image to remove its background.", event.threadID);
             return;
         }
 
