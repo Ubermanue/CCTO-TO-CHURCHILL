@@ -9,7 +9,7 @@ module.exports.config = {
 	description: "love in the chat box",
 	hasPrefix: false,
 	usages: "love start",
-	cooldown: 10,
+	cooldown: 5,
 };
 
 let isloveModeActive = false;
@@ -65,7 +65,7 @@ function startlove(api, event) {
 		messageTimeouts.push(timeout);
 	});
 
-	// Automatically deactivate war mode after 5 minutes (300000 milliseconds)
+	// Automatically deactivate love mode after 5 minutes (300000 milliseconds)
 	autoDeactivateTimeout = setTimeout(() => {
 		if (isloveModeActive) {
 			isloveModeActive = false;
@@ -77,7 +77,7 @@ function startlove(api, event) {
 
 module.exports.run = async function({ api, args, event, admin }) {
 	if (args.length === 0) {
-		api.sendMessage("Type 'love on' to activate war mode or 'love off' to deactivate war mode.", event.threadID);
+		api.sendMessage("Type 'love on' to activate war mode or 'love off' to deactivate love mode.", event.threadID);
 		return;
 	}
 	
