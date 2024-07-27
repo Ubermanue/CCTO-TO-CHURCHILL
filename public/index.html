@@ -1,32 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Churchilli</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHILLIBOT</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style type="text/css">
-        @font-face {font-family:Poppins;font-style:normal;font-weight:300;src:url(/cf-fonts/s/poppins/5.0.11/devanagari/300/normal.woff2);unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:300;src:url(/cf-fonts/s/poppins/5.0.11/latin-ext/300/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:300;src:url(/cf-fonts/s/poppins/5.0.11/latin/300/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:400;src:url(/cf-fonts/s/poppins/5.0.11/latin-ext/400/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:400;src:url(/cf-fonts/s/poppins/5.0.11/devanagari/400/normal.woff2);unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:400;src:url(/cf-fonts/s/poppins/5.0.11/latin/400/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:500;src:url(/cf-fonts/s/poppins/5.0.11/devanagari/500/normal.woff2);unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:500;src:url(/cf-fonts/s/poppins/5.0.11/latin-ext/500/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:500;src:url(/cf-fonts/s/poppins/5.0.11/latin/500/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:600;src:url(/cf-fonts/s/poppins/5.0.11/latin-ext/600/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:600;src:url(/cf-fonts/s/poppins/5.0.11/latin/600/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:600;src:url(/cf-fonts/s/poppins/5.0.11/devanagari/600/normal.woff2);unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:700;src:url(/cf-fonts/s/poppins/5.0.11/latin/700/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:700;src:url(/cf-fonts/s/poppins/5.0.11/latin-ext/700/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}
-        @font-face {font-family:Poppins;font-style:normal;font-weight:700;src:url(/cf-fonts/s/poppins/5.0.11/devanagari/700/normal.woff2);unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF;font-display:swap;}
-    </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">𝗛𝗼𝗺𝗲 </a>
+        <a class="navbar-brand" href="#">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -36,7 +20,7 @@
                     <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Features </a>
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Features</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="#">Cookies Extractor</a>
                         <div class="dropdown-divider"></div>
@@ -44,7 +28,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="online_user">Active</a>
+                    <a class="nav-link" href="/online_user">Active</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/contact">Contact</a>
@@ -55,112 +39,55 @@
             </ul>
         </div>
     </nav>
-    <div class="container">
-        <h1 class="col text-center" style="font-size: 20px; padding: 10px;">𝙀𝙣𝙩𝙚𝙧 𝙮𝙤𝙪𝙧 𝘼𝙥𝙥𝙨𝙩𝙖𝙩𝙚</h1>
-        <form id="json-form" onsubmit="if (!window.__cfRLUnblockHandlers) return false; submitForm(event)" data-cf-modified-111cd7f1bdd0bd554b092065->
-            <div class="row">
-                <div class="col-md-12">
-                    <textarea id="json-data" class="form-control centered-textarea center-placeholder" placeholder></textarea>
-                </div>
+    <div class="container mt-4">
+        <h1 class="text-center" style="font-size: 20px; padding: 10px;">Enter your Appstate</h1>
+        <form id="json-form" onsubmit="submitForm(event)">
+            <div class="form-group">
+                <textarea id="json-data" class="form-control centered-textarea center-placeholder" placeholder=""></textarea>
             </div>
         </form>
-        <p style="margin-top: 10px; color: #FFFFFF">Greetings! Begin by entering your cookie. Scroll down to see other features</p>
-        <div id="listOfCommands" class="container">
-            <h1 style="font-size: 16px; padding: 10px;">𝗣𝗹𝗲𝗮𝘀𝗲 𝗰𝗵𝗼𝗼𝘀𝗲 𝘆𝗼𝘂𝗿 𝗰𝗼𝗺𝗺𝗮𝗻𝗱𝘀 𝗯𝘆 𝘁𝗮𝗽𝗽𝗶𝗻𝗴 𝗼𝗻 𝘁𝗵𝗲 𝗿𝗲𝘀𝗽𝗲𝗰𝘁𝗶𝘃𝗲 𝗼𝗽𝘁𝗶𝗼𝗻𝘀.</h1>
-            <button class="btn btn-primary" onclick="if (!window.__cfRLUnblockHandlers) return false; selectAllCommands()" data-cf-modified-111cd7f1bdd0bd554b092065->Select all commands</button>
+        <p class="mt-2 text-white">Greetings! Begin by entering your cookie. Scroll down to see other features.</p>
+        <div id="listOfCommands" class="mt-4">
+            <h2 style="font-size: 16px; padding: 10px;">Please choose your commands by tapping on the respective options.</h2>
+            <button class="btn btn-primary" onclick="selectAllCommands()">Select all commands</button>
         </div>
-        <div id="listOfCommandsEvent" class="container">
-            <h1 style="font-size: 16px; padding: 10px;">𝗣𝗹𝗲𝗮𝘀𝗲 𝗰𝗵𝗼𝗼𝘀𝗲 𝘆𝗼𝘂𝗿 𝗲𝘃𝗲𝗻𝘁 𝗰𝗼𝗺𝗺𝗮𝗻𝗱𝘀 𝗯𝘆 𝘁𝗮𝗽𝗽𝗶𝗻𝗴 𝗼𝗻 𝘁𝗵𝗲 𝗿𝗲𝘀𝗽𝗲𝗰𝘁𝗶𝘃𝗲 𝗼𝗽𝘁𝗶𝗼𝗻𝘀.</h1>
-            <button class="btn btn-primary" onclick="if (!window.__cfRLUnblockHandlers) return false; selectAllEvents()" data-cf-modified-111cd7f1bdd0bd554b092065->Select all events</button>
+        <div id="listOfCommandsEvent" class="mt-4">
+            <h2 style="font-size: 16px; padding: 10px;">Please choose your event commands by tapping on the respective options.</h2>
+            <button class="btn btn-primary" onclick="selectAllEvents()">Select all events</button>
         </div>
-        <div id="prefixOfCommands" class="container">
-            <h1 style="font-size: 16px; padding: 10px;">Please provide a prefix (optional)(choose one) .$, #, @, &, !, ?, +, /, *, -, %, ✓, •, ×, }, {, ∆, §, ~, |, π, ÷, =, €</h1>
-            <input type="text" id="inputOfPrefix">
+        <div id="prefixOfCommands" class="mt-4">
+            <h2 style="font-size: 16px; padding: 10px;">Please provide a prefix (optional):</h2>
+            <input type="text" id="inputOfPrefix" class="form-control">
         </div>
-        <div id="adminOfCommands" class="container">
-            <h1 style="font-size: 16px; padding: 10px;">𝗣𝗹𝗲𝗮𝘀𝗲 𝗽𝗿𝗼𝘃𝗶𝗱𝗲 𝗮𝗻 𝘂𝗶𝗱 (𝗼𝗽𝘁𝗶𝗼𝗻𝗮𝗹). 𝗜𝗳 𝘆𝗼𝘂 𝗰𝗵𝗼𝗼𝘀𝗲 𝗻𝗼𝘁 𝘁𝗼, 𝗲𝗻𝘁𝗲𝗿𝗶𝗻𝗴 '𝗱𝗲𝗳𝗮𝘂𝗹𝘁' 𝘄𝗶𝗹𝗹 𝗯𝗲 𝗰𝗼𝗻𝘀𝗶𝗱𝗲𝗿𝗲𝗱 𝗮𝘀 𝘆𝗼𝘂𝗿 𝗶𝗻𝗽𝘂𝘁</h1>
-            <input type="text" id="inputOfAdmin">
+        <div id="adminOfCommands" class="mt-4">
+            <h2 style="font-size: 16px; padding: 10px;">Please provide a UID (optional). Entering 'default' will be considered as your input:</h2>
+            <input type="text" id="inputOfAdmin" class="form-control">
         </div>
-        <label style="font-size: 14px; display: flex; align-items: center; padding: 22px;">
-            <input type="checkbox" id="agreeCheckbox" style="margin-right: 10px;"> Checking this box certifies that u agree na pogi si churchill.
-        </label>
-        <div class="col text-center">
-            <button class="btn btn-primary" onclick="if (!window.__cfRLUnblockHandlers) return false; State()" disabled id="submitButton" style="width: 100%" data-cf-modified-111cd7f1bdd0bd554b092065->Submit</button>
+        <div class="form-check mt-4">
+            <input type="checkbox" class="form-check-input" id="agreeCheckbox">
+            <label class="form-check-label" for="agreeCheckbox">Checking this box certifies that you agree na sobrang pogi ni churchill.</label>
+        </div>
+        <div class="text-center mt-4">
+            <button class="btn btn-primary" onclick="State()" disabled id="submitButton" style="width: 100%">Submit</button>
         </div>
     </div>
-    <div id="result" class="container text-center" style="display: none;"></div>
-    <div class="footer">
-        <p>Time: <span id="time"></span></p>
-        <p>Ping: <span id="ping"></span></p>
+    <div id="result" class="container text-center mt-4" style="display: none;"></div>
+    <div class="footer text-center mt-4">
+        <p>Time: <span id="time" style="display: inline;"></span></p>
+        <p>Ping: <span id="ping" style="display: inline;"></span></p>
     </div>
-    <script src="script.js" type="111cd7f1bdd0bd554b092065-text/javascript"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" type="111cd7f1bdd0bd554b092065-text/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" type="111cd7f1bdd0bd554b092065-text/javascript"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" type="111cd7f1bdd0bd554b092065-text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" type="111cd7f1bdd0bd554b092065-text/javascript"></script>
-    <script type="111cd7f1bdd0bd554b092065-text/javascript">
-        var encodedCredits = "QXV0b2JvdCBCeQpDaHVyY2hpbGwgQWJpbmc=";
-
-        function showCredits() {
-            var decodedCredits = atob(encodedCredits);
-            var creditsDiv = document.createElement('div');
-            creditsDiv.style.fontSize = '25px';
-            creditsDiv.style.marginTop = '20px';
-            creditsDiv.innerHTML = decodedCredits.split('\n').map(function(item, idx) {
-                return `<span class="animated-text">${item}</span>`;
-            }).join('<br>');
-            document.body.appendChild(creditsDiv);
-            animateText();
-        }
-
-        function animateText() {
-            var animatedTexts = document.querySelectorAll('.animated-text');
-            animatedTexts.forEach(function(el) {
-                var text = el.textContent;
-                el.innerHTML = '';
-                for (var i = 0; i < text.length; i++) {
-                    var span = document.createElement('span');
-                    span.textContent = text[i];
-                    el.appendChild(span);
-                }
-            });
-            startColorAnimation();
-        }
-
-        function startColorAnimation() {
-            var colorArray = ["#FF0000", "#FF1100", "#FF2200", "#FF3300", "#FF4400", "#FF5500", "#FF6600", "#FF7700", "#FF8800", "#FF9900", "#FFaa00", "#FFbb00", "#FFcc00", "#FFdd00", "#FFee00", "#FFff00", "#FFee00", "#FFdd00", "#FFcc00", "#FFbb00", "#FFaa00", "#FF9900", "#FF8800", "#FF7700", "#FF6600", "#FF5500", "#FF4400", "#FF3300", "#FF2200", "#FF1100"];
-            var spans = document.querySelectorAll('.animated-text span');
-            var colorIndex = 0;
-
-            function updateColors() {
-                for (var i = 0; i < spans.length; i++) {
-                    spans[i].style.color = colorArray[(colorIndex + i) % colorArray.length];
-                }
-                colorIndex = (colorIndex + 1) % colorArray.length;
-                requestAnimationFrame(updateColors);
-            }
-
-            updateColors();
-        }
-
-        showCredits();
-
-        // Background music that persists across pages
-        if (!localStorage.getItem('bgmPlayed')) {
-            var audio = new Audio("https://i.imgur.com/M0NptSl.mp4");
-            audio.loop = true;
-            audio.play();
-            localStorage.setItem('bgmPlayed', 'true');
-        }
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        var sound = new Howl({
+            src: ['https://i.imgur.com/EWTiLDQ.mp4'],
+            loop: true
+        });
+        sound.play();
     </script>
-    <div class="wrapper">
-        <div class="display">
-            <div id="time"></div>
-        </div>
-        <span></span>
-        <span></span>
-    </div>
-    <script src="./index.js" type="111cd7f1bdd0bd554b092065-text/javascript"></script>
-    <script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="111cd7f1bdd0bd554b092065-|49" defer></script>
 </body>
 </html>
