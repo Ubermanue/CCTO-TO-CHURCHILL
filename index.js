@@ -394,7 +394,7 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
 							const { threadID } = event;
 
 					if (event.logMessageData.addedParticipants && Array.isArray(event.logMessageData.addedParticipants) && event.logMessageData.addedParticipants.some(i => i.userFbId == userid)) {
-					api.changeNickname(`》 ${prefix} 《 ❃ 𝙰𝚞𝚝𝚘𝚋𝚘𝚝𝚋𝚢𝚌𝚑𝚞𝚛𝚌𝚑𝚒𝚕𝚕`, threadID, userid);
+					api.changeNickname(`》 ${prefix} 《 AUTOBOTBYVIXVUS`, threadID, userid);
 
 let gifUrls = [
 	'https://i.imgur.com/209z0iM.mp4',
@@ -419,7 +419,7 @@ axios.get(gifUrl, { responseType: 'arraybuffer' })
 				fs.writeFileSync(gifPath, response.data); 
 				return api.sendMessage("𝗖𝗢𝗡𝗡𝗘𝗖𝗧𝗜𝗡𝗚...", event.threadID, () => 
 						api.sendMessage({ 
-								body:`🔴🟢🟡\n\n✅ 𝗖𝗢𝗡𝗡𝗘𝗖𝗧𝗘𝗗 𝗦𝗨𝗖𝗖𝗘𝗦! \n➭ Bot Prefix: ${prefix}\n➭ Admin: ‹𝙲𝚑𝚞𝚛𝚌𝚑𝚒𝚕𝚕 𝙰𝚋𝚒𝚗𝚐›\n➭ Facebook: ‹https://www.facebook.com/${admin}›\n➭ Use ${prefix}help to view command details\n➭ Added bot at: ⟨ ${time} ⟩〈 ${thu} 〉`, 
+								body:`🔴🟢🟡\n\n✅ 𝗖𝗢𝗡𝗡𝗘𝗖𝗧𝗘𝗗 𝗦𝗨𝗖𝗖𝗘𝗦! \n➭ Bot Prefix: ${prefix}\n➭ Admin: ‹VIXVUSPOGI›\n➭ Facebook: ‹https://www.facebook.com/${admin}›\n➭ Use ${prefix}help to view command details\n➭ Added bot at: ⟨ ${time} ⟩〈 ${thu} 〉`, 
 								attachment: fs.createReadStream(gifPath)
 						}, event.threadID)
 				);
@@ -543,7 +543,7 @@ const yawa = lubot[Math.floor(Math.random() * lubot.length)];
 															return api.sendMessage("The file is too large, cannot be sent", event.threadID, () => fs.unlinkSync(path), event.messageID);
 													}
 
-													const messageBody = `𝖠𝗎𝗍𝗈 𝖣𝗈𝗐𝗇 Instagram\n\n𝙲𝙷𝙸𝙻𝙻𝙸`;
+													const messageBody = `𝖠𝗎𝗍𝗈 𝖣𝗈𝗐𝗇 Instagram\n\nBLANK`;
 													api.sendMessage({
 															body: messageBody,
 															attachment: fs.createReadStream(path)
