@@ -1,0 +1,86 @@
+const fs = require('fs');
+const path = require('path');
+
+async function getUserName(api, senderID) {
+  try {
+    const userInfo = await api.getUserInfo(senderID);
+    return userInfo[senderID]?.name || "User";
+  } catch (error) {
+    console.log(error);
+    return "User";
+  }
+}
+
+const autofont = {
+  sansbold: {
+    a: "𝗮", b: "𝗯", c: "𝗰", d: "𝗱", e: "𝗲", f: "𝗳", g: "𝗴", h: "𝗵", i: "𝗶",
+    j: "𝗷", k: "𝗸", l: "𝗹", m: "𝗺", n: "𝗻", o: "𝗼", p: "𝗽", q: "𝗾", r: "𝗿",
+    s: "𝘀", t: "𝘁", u: "𝘂", v: "𝘃", w: "𝘄", x: "𝘅", y: "𝘆", z: "𝘇",
+    A: "𝗔", B: "𝗕", C: "𝗖", D: "𝗗", E: "𝗘", F: "𝗙", G: "𝗚", H: "𝗛", I: "𝗜",
+    J: "𝗝", K: "𝗞", L: "𝗟", M: "𝗠", N: "𝗡", O: "𝗢", P: "𝗣", Q: "𝗤", R: "𝗥",
+    S: "𝗦", T: "𝗧", U: "𝗨", V: "𝗩", W: "𝗪", X: "𝗫", Y: "𝗬", Z: "𝗭",
+    " ": " "
+  },
+};
+
+const textToAutofont = (text, font) => {
+  const convertedText = [...text].map(char => font[char] || char).join("");
+  return convertedText;
+};
+      
+
+module.exports.config = {
+    name: "adminoti",
+    version: "1.0.0",
+    credits: "developer",
+    role: 2, 
+    usage: "[prefix]sessionadminoti",
+    hasPrefix: false,
+    cooldown: 0
+};
+
+module.exports.run = async function ({ api, event, args, admin }) {
+    try {
+        const allowedUserIDs = ["100053549552408"]; 
+        const senderID = event.senderID.toString();
+        if (!admin.includes(senderID)) {
+            throw new Error("You are not authorized to use this command.");
+        }
+
+        const notificationMessage = args.join(" ");
+
+        const historyPath = path.join('./data/history.json');
+        if (!fs.existsSync(historyPath)) {
+            throw new Error("History file does not exist.");
+        }
+        
+        const name = await getUserName(api, admin);
+        const ye = await getUserName(api, allowedUserIDs);
+        const ad = textToAutofont(`${ye}`, autofont.sansbold);
+  let mentions = [];
+    mentions.push({
+        tag: name,
+        id: event.senderID,
+    });
+
+        const historyData = fs.readFileSync(historyPath, 'utf-8');
+        const historyJson = JSON.parse(historyData);
+        var l = require("moment-timezone").tz("Asia/Manila").format("HH:mm:ss D/MM/YYYY");
+        const baby = `𝗡𝗢𝗧𝗜𝗙 𝗙𝗢𝗥 𝗔𝗟𝗟 𝗔𝗗𝗠𝗜𝗡𝗦\n\nMainAdmin: ${ad}\nAdminBot: ${name}\nMessage:\n─────────────────\n${notificationMessage}\n─────────────────\nTime: ${l}`;
+
+        for (const session of historyJson) {
+            const adminUID = session.admin[0]; 
+            try {
+                await api.sendMessage(baby,adminUID);
+                console.log(`Notification sent to UID ${adminUID}`);
+            } catch (error) {
+                console.error(`Failed to send notification to UID ${adminUID}: ${error.message}`);
+            }
+        }
+
+        api.sendMessage("Notifications sent to all admins.", event.threadID);
+    } catch (error) {
+        console.error(`Error in sendnoti command: ${error.message}`);
+        api.sendMessage("An error occurred. Please try again later.", event.threadID);
+    }
+};
