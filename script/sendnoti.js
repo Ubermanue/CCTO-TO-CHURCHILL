@@ -25,7 +25,7 @@ module.exports.run = async function ({ api, event, args, admin }) {
 ▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱
 ➜ ${custom}
 
-𝘼𝙪𝙩𝙤𝘽𝙤𝙩𝙙𝙚𝙫: https://www.facebook.com/Churchill.Dev4100`,
+𝘼𝙪𝙩𝙤𝘽𝙤𝙩𝙙𝙚𝙫: https://www.facebook.com/vixvus`,
 				thread.threadID
 			);
 			sentCount++;
