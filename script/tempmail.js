@@ -1,60 +1,56 @@
-const { TempMail } = require("1secmail-api");
+const axios = require("axios");
+const fs = require("fs-extra");
+const path = require("path");
 
-function generateRandomId() {
-		var length = 6;
-		var characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-		var randomId = '';
+module.exports = {
+  config: {
+    name: "tempmail",
+    aliases: [`tm`],
+    version: "1.0.0",
+    author: "UPoL | ArYAN",
+    role: 0,
+    countDown: 5,
+    longDescription: {
+      en: "Generate temporary email and check inbox"
+    },
+    category: "email",
+    guide: {
+      en: "{p}tempmail < subcommand >\n\nFor Example:\n{p}tempmail gen\n${p}tempmail inbox <tempmail>"
+    }
+  },
+  onStart: async function ({ api, event, args }) {
+    try {
+      if (args.length === 0) {
+        return api.sendMessage(this.config.guide.en, event.threadID, event.messageID);
+      }
 
-		for (var i = 0; i < length; i++) {
-				randomId += characters.charAt(Math.floor(Math.random() * characters.length));
-		}
+      if (args[0] === "gen") {
+        try {
+          const response = await axios.get("https://itsaryan.onrender.com/api/tempmail/get");
+          const responseData = response.data.tempmail;
+          api.sendMessage(`ðŸ“®|ð—§ð—²ð—ºð—½ð—ºð—®ð—¶ð—¹\nâ”â”â”â”â”â”â”â”â”â”â”â”â”\n\nð–§ð–¾ð—‹ð–¾ ð—‚ð—Œ ð—’ð—ˆð—Žð—‹ ð—€ð–¾ð—‡ð–¾ð—‹ð–ºð—ð–¾ð–½ ð—ð–¾ð—†ð—‰ð—†ð–ºð—‚ð—…\n\nðŸ“|ð—˜ð—ºð—®ð—¶ð—¹\nâž¤ ${responseData}`, event.threadID, event.messageID);
+        } catch (error) {
+          console.error("âŒ | Error", error);
+          api.sendMessage("âŒ|Unable to generate email address. Please try again later...", event.threadID, event.messageID);
+        }
+      } else if (args[0].toLowerCase() === "inbox" && args.length === 2) {
+        const email = args[1];
+        try {
+          const response = await axios.get(`https://itsaryan.onrender.com/api/tempmail/inbox?email=${email}&apikey=aryan`);
+          const data = response.data;
+          const inboxMessages = data.map(({ from, subject, body, date }) => `ðŸ“|ð—§ð—²ð—ºð—ºð—®ð—¶ð—¹ ð—œð—»ð—¯ð—¼ð˜…\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n\nð–§ð–¾ð—‹ð–¾ ð—‚ð—Œ ð—’ð—ˆð—Žð—‹ ð—ð–¾ð—†ð—‰ð—†ð–ºð—‚ð—… ð—‚ð—‡ð–»ð—ˆð—‘\n\nðŸ”Ž ð—™ð—¿ð—¼ð—º\n${from}\nðŸ“­ ð—¦ð˜‚ð—¯ð—·ð—²ð—°ð˜\nâž¤ ${subject || 'Not Found'}\n\nðŸ“ ð— ð—²ð˜€ð˜€ð—®ð—´ð—²\nâž¤ ${body}\nðŸ—“ï¸ ð——ð—®ð˜ð—²\nâž¤ ${date}`).join('\n\n');
+          api.sendMessage(inboxMessages, event.threadID, event.messageID);
+        } catch (error) {
+          console.error("ðŸ”´ Error", error);
+          api.sendMessage("âŒ|Can't get any mail yet. Please send mail first.", event.threadID, event.messageID);
+        }
+      } else {
+        api.sendMessage("âŒ | Use 'Tempmail gen' to generate email and 'Tempmail inbox {email}' to get the inbox emails.", event.threadID, event.messageID);
+      }
 
-		return randomId;
-}
-
-module.exports.config = {
-		name: "tempm",
-		role: 0,
-		credits: "Deku",
-		description: "Generate temporary email (auto get inbox)",
-		usages: "[tempmail]",
-		hasPrefix: false,
-		cooldown: 5,
-		aliases: ["temp"]
-};
-
-module.exports.run = async function ({ api, event }) {
-		const reply = (msg) => api.sendMessage(msg, event.threadID, event.messageID);
-
-		try {
-				// Generate temporary email
-				const mail = new TempMail(generateRandomId());
-
-				// Auto fetch
-				mail.autoFetch();
-
-				if (mail) reply("Your temporary email: " + mail.address);
-
-				// Fetch function
-				const fetch = () => {
-						mail.getMail().then((mails) => {
-								if (!mails[0]) {
-										return;
-								} else {
-										let b = mails[0];
-										var msg = `You have a message!\n\nFrom: ${b.from}\n\nSubject: ${b.subject}\n\nMessage: ${b.textBody}\nDate: ${b.date}`;
-										reply(msg + `\n\nOnce the email and message are received, they will be automatically deleted.`);
-										return mail.deleteMail();
-								}
-						});
-				};
-
-				// Auto fetch every 3 seconds
-				fetch();
-				setInterval(fetch, 3 * 1000);
-
-		} catch (err) {
-				console.log(err);
-				return reply(err.message);
-		}
+    } catch (error) {
+      console.error(error);
+      return api.sendMessage(`An error occurred. Please try again later.`, event.threadID, event.messageID);
+    }
+  }
 };
